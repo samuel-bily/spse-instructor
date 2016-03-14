@@ -14,6 +14,8 @@ public class Question {
     public static final int FOUR = 3;
 
     private int id;
+    private int idU;
+    private int idT;
     private String name;
     private String[] options;
     private String stat;
@@ -31,6 +33,22 @@ public class Question {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdU() {
+        return idU;
+    }
+
+    public void setIdU(int idU) {
+        this.idU = idU;
+    }
+
+    public int getIdT() {
+        return idT;
+    }
+
+    public void setIdT(int idT) {
+        this.idT = idT;
     }
 
     public String getName() {
@@ -84,4 +102,5 @@ public class Question {
                 ",\"ido\":"+ current +
                 '}';
     }
+
 }

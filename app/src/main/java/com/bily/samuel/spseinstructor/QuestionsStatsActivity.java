@@ -1,20 +1,27 @@
 package com.bily.samuel.spseinstructor;
 
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.adapter.QuestionAdapter;
+import com.bily.samuel.spseinstructor.lib.adapter.StatisticsAdapter;
+import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
 import com.bily.samuel.spseinstructor.lib.database.Question;
+import com.bily.samuel.spseinstructor.lib.database.Test;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -24,20 +31,20 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
     private QuestionAdapter questionAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private GetQuestionStats getQuestionStats;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_stats);
+        db = new DatabaseHelper(getApplicationContext());
 
         Intent i = getIntent();
         idU = i.getIntExtra("id_u",1);
         idT = i.getIntExtra("id_t",1);
         setTitle(i.getStringExtra("name"));
 
-        questionAdapter = new QuestionAdapter(getApplicationContext(),R.layout.fragment_question);
-        ListView listView = (ListView)findViewById(R.id.listQuestions);
-        listView.setAdapter(questionAdapter);
+        loadDataToListView();
 
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeQuestions);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -46,13 +53,26 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
 
         getQuestionStats = new GetQuestionStats();
         getQuestionStats.execute();
-
     }
 
     @Override
     public void onRefresh() {
         getQuestionStats = new GetQuestionStats();
         getQuestionStats.execute();
+    }
+
+    public void loadDataToListView(){
+        try{
+            final ArrayList<Question> questions = db.getQuestions(idT,idU);
+            questionAdapter = new QuestionAdapter(getApplicationContext(),R.layout.fragment_question);
+            for(int i = 0; i<questions.size(); i++){
+                Question q = questions.get(i);
+                questionAdapter.add(q);
+            }
+            ListView listView = (ListView)findViewById(R.id.listQuestions);
+            listView.setAdapter(questionAdapter);
+        }catch(CursorIndexOutOfBoundsException | NullPointerException e){
+        }
     }
 
     class GetQuestionStats extends AsyncTask<Void,Void,Void> {
@@ -67,12 +87,7 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
             try {
                 JSONObject jsonObject = jsonParser.makePostCall(values);
                 if(jsonObject.getInt("success") == 1){
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            questionAdapter.delete();
-                        }
-                    });
+                    db.dropQuestions(idT,idU);
                     JSONArray questions = jsonObject.getJSONArray("questions");
                     for(int i = 0; i < questions.length(); i++){
                         JSONObject question = questions.getJSONObject(i);
@@ -80,26 +95,21 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
                         q.setName(question.getString("text"));
                         q.setStat(question.getString("answer"));
                         q.setRight(question.getInt("right"));
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                questionAdapter.add(q);
-                                questionAdapter.notifyDataSetChanged();
-                            }
-                        });
+                        q.setIdT(idT);
+                        q.setIdU(idU);
+                        db.storeQuestions(q);
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    loadDataToListView();
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
-
             return null;
         }
     }

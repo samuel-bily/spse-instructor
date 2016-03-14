@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by samuel on 2.2.2016.
  */
@@ -31,9 +33,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER +  " (" + KEY_ID + " INTEGER PRIMARY KEY,"+ KEY_IDU + " INTEGER," + KEY_NAME + " TEXT," + KEY_EMAIL + " TEXT" + ")";
 
-    private static final String CREATE_TABLE_STAT_TESTS = "CREATE TABLE " + TABLE_STAT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT" + ")";
-    private static final String CREATE_TABLE_STAT_USERS = "CREATE TABLE " + TABLE_STAT_USERS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_NAME + " TEXT," + KEY_STAT + "REAL" + ")";
-    private static final String CREATE_TABLE_STAT_QUESTIONS = "CREATE TABLE " + TABLE_STAT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_RIGHT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ANSWER + " TEXT," + KEY_STAT + "REAL" + ")";
+    private static final String CREATE_TABLE_STAT_TESTS = "CREATE TABLE " + TABLE_STAT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
+    private static final String CREATE_TABLE_STAT_USERS = "CREATE TABLE " + TABLE_STAT_USERS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER,"+ KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
+    private static final String CREATE_TABLE_STAT_QUESTIONS = "CREATE TABLE " + TABLE_STAT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER," + KEY_RIGHT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ANSWER+" TEXT"+")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -52,6 +54,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void storeTest(Test test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDT, test.getId_t());
+        values.put(KEY_NAME, test.getName());
+        values.put(KEY_STAT, test.getStat());
+        db.insert(TABLE_STAT_TESTS, null, values);
+    }
+
+    public void storeUsers(Test test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDU, test.getId_t());
+        values.put(KEY_NAME, test.getName());
+        values.put(KEY_STAT, test.getStat());
+        values.put(KEY_IDT, test.getId());
+        db.insert(TABLE_STAT_USERS, null, values);
+    }
+
+    public void storeQuestions(Question q){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, q.getName());
+        values.put(KEY_IDT, q.getIdT());
+        values.put(KEY_IDU, q.getIdU());
+        values.put(KEY_ANSWER, q.getStat());
+        values.put(KEY_RIGHT, q.getRight());
+        db.insert(TABLE_STAT_QUESTIONS, null, values);
+    }
+
     public void storeUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -59,6 +91,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_EMAIL, user.getEmail());
         values.put(KEY_NAME, user.getName());
         db.insert(TABLE_USER, null, values);
+    }
+
+    public ArrayList<Test> getTests(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Test> tests = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_STAT_TESTS,null);
+        for(int i = 0; i < c.getCount(); i++){
+            c.moveToPosition(i);
+            Test t = new Test();
+            t.setId_t(c.getInt(c.getColumnIndex(KEY_IDT)));
+            t.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+            t.setStat(c.getDouble(c.getColumnIndex(KEY_STAT)));
+            tests.add(t);
+        }
+        c.close();
+        return tests;
+    }
+
+    public ArrayList<Test> getUsers(int idt){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Test> tests = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_STAT_USERS + " WHERE " + KEY_IDT + " = " + idt,null);
+        for(int i = 0; i < c.getCount(); i++){
+            c.moveToPosition(i);
+            Test t = new Test();
+            t.setId_t(c.getInt(c.getColumnIndex(KEY_IDU)));
+            t.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+            t.setStat(c.getDouble(c.getColumnIndex(KEY_STAT)));
+            tests.add(t);
+        }
+        c.close();
+        return tests;
+    }
+
+    public ArrayList<Question> getQuestions(int idt, int idu){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Question> questions = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_STAT_QUESTIONS + " WHERE " + KEY_IDT + " = " + idt + " AND " + KEY_IDU + " = " + idu,null);
+        for(int i = 0; i < c.getCount(); i++){
+            c.moveToPosition(i);
+            Question q = new Question();
+            q.setRight(c.getInt(c.getColumnIndex(KEY_RIGHT)));
+            q.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+            q.setStat(c.getString(c.getColumnIndex(KEY_ANSWER)));
+            questions.add(q);
+        }
+        c.close();
+        return questions;
+    }
+
+    public void dropTests(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_STAT_TESTS, null, null);
+    }
+    public void dropUsers(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_STAT_USERS, KEY_IDT + "=" + id, null);
+    }
+    public void dropQuestions(int idt, int idu){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_STAT_QUESTIONS, KEY_IDT + "=" + idt + " AND " + KEY_IDU + " = " + idu , null);
     }
 
     public User getUser(){
@@ -83,6 +176,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void dropTable() {
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_QUESTIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_TESTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_USERS);
         onCreate(db);
     }
 }

@@ -6,6 +6,7 @@ package com.bily.samuel.spseinstructor.lib.database;
 public class Test {
 
     private int id_t;
+    private int id;
     private double stat;
     private String name;
 
@@ -33,5 +34,13 @@ public class Test {
 
     public void setId_t(int id_t) {
         this.id_t = id_t;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
