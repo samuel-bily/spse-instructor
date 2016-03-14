@@ -58,7 +58,9 @@ public class JSONParser {
                 jsonObject = new JSONObject(stringBuilder.toString());
             }
         } catch (IOException | JSONException e) {
-            Log.e("JSONParser", stringBuilder.toString());
+            if (stringBuilder != null) {
+                Log.e("JSONParser", stringBuilder.toString());
+            }
             //e.printStackTrace();
             return new JSONObject("{\nsuccess: 0,\nmessage: \"Something went wrong.\"\n}");
         }
