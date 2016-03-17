@@ -9,17 +9,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.bily.samuel.spseinstructor.RegisterActivity"
-    android:id="@+id/relativeRegister">
+    android:id="@+id/relativeRegister"
+    android:background="@drawable/w">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/linearLayout2"
-        android:layout_marginTop="6dp">
+        android:layout_marginTop="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +27,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Registrácia"
             android:id="@+id/textView4"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp" />
 
         <EditText
             android:layout_width="match_parent"
@@ -108,14 +109,6 @@
         android:clickable="true"
         android:onClick="onLoginButtonClicked"
         android:textStyle="italic" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:src="@drawable/logo"
-        android:layout_above="@+id/linearLayout2"
-        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
