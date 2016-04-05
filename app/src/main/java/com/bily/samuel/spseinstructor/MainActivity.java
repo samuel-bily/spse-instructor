@@ -56,6 +56,22 @@ public class MainActivity extends AppCompatActivity {
         });**/
     }
 
+    public void onResume(){
+        super.onResume();
+        db = new DatabaseHelper(getApplicationContext());
+        User user = db.getUser();
+        if(user == null){
+            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+            finish();
+            startActivity(i);
+        }else {
+            TextView userName = (TextView) findViewById(R.id.userName);
+            TextView userEmail = (TextView) findViewById(R.id.userEmail);
+            userName.setText(user.getName());
+            userEmail.setText(user.getEmail());
+        }
+    }
+
     public void onAddTestButtonClicked(View view){
         fm = getSupportFragmentManager();
         dialogFragment dFragment = new dialogFragment();
@@ -63,9 +79,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onProfileButtonClicked(View view){
-        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-        db.dropTable();
-        finish();
+        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(i);
     }
 

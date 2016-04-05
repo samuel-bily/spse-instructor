@@ -17,14 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" android:theme="@style/AppTheme.NoTittle"/>
-        <activity android:name=".RegisterActivity" android:theme="@style/AppTheme.NoTittle" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.NoTittle" />
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/AppTheme.NoTittle" />
         <activity
             android:name=".AddTest"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".StatisticsActivity"  />
+        <activity android:name=".StatisticsActivity" />
         <activity android:name=".UserStatsActivity" />
         <activity android:name=".QuestionsStatsActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

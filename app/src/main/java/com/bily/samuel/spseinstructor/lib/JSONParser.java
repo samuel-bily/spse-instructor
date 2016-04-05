@@ -62,7 +62,7 @@ public class JSONParser {
                 Log.e("JSONParser", stringBuilder.toString());
             }
             //e.printStackTrace();
-            return new JSONObject("{\nsuccess: 0,\nmessage: \"Something went wrong.\"\n}");
+            return new JSONObject("{\nsuccess: 0,\nmessage: \"Ste offline.\"\n}");
         }
         return jsonObject;
     }

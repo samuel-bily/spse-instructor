@@ -27,7 +27,6 @@ public class AddTest extends AppCompatActivity {
     private AddQuestionAdapter questionAdapter;
     private ArrayList<Question> questions;
     private ListView listView;
-
     private String test;
 
     @Override
@@ -38,10 +37,8 @@ public class AddTest extends AppCompatActivity {
         Intent intent = getIntent();
         intent.getStringExtra("name");
         int number = intent.getIntExtra("number",3);
-
         test = intent.getStringExtra("name");
         setTitle(test);
-
         questionAdapter = new AddQuestionAdapter(getApplicationContext(),R.layout.cardview_add_question);
         for (int i = 1; i<=number; i++) {
             Question question = new Question();
@@ -52,7 +49,6 @@ public class AddTest extends AppCompatActivity {
         listView.setAdapter(questionAdapter);
     }
 
-
     public void sendQuestions(View view){
         questions = new ArrayList<>();
         for(int i = 0; i < listView.getAdapter().getCount(); i++){
@@ -62,21 +58,16 @@ public class AddTest extends AppCompatActivity {
             EditText option1 = (EditText)viewQuestion.findViewById(R.id.optionEdit1);
             EditText option2 = (EditText)viewQuestion.findViewById(R.id.optionEdit2);
             EditText option3 = (EditText)viewQuestion.findViewById(R.id.optionEdit3);
-
             String[] options = {option0.getText().toString(),option1.getText().toString(),option2.getText().toString(),option3.getText().toString()};
 
             int current = questionAdapter.getItem(i).getCurrent();
-
-
             Question question = new Question();
             question.setName(questionEdit.getText().toString());
             question.setOptions(options);
             question.setCurrent(current);
             questions.add(question);
         }
-
         new SendTest().execute();
-
     }
 
     public Snackbar prepareSnack(String msg){
