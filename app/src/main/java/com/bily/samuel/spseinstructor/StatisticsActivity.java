@@ -17,6 +17,7 @@ import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.adapter.StatisticsAdapter;
 import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
 import com.bily.samuel.spseinstructor.lib.database.Test;
+import com.bily.samuel.spseinstructor.lib.database.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -94,7 +95,9 @@ public class StatisticsActivity extends AppCompatActivity implements SwipeRefres
         protected Void doInBackground(Void... params) {
             JSONParser jsonParser = new JSONParser();
             HashMap<String, String> values = new HashMap<>();
+            User u = db.getUser();
             values.put("tag", "getStats");
+            values.put("id_i","" + u.getIdu());
             try{
                 JSONObject jsonObject = jsonParser.makePostCall(values);
                 Log.e("JSON",jsonObject.toString());

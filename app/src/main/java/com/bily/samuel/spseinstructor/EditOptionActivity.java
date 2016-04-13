@@ -1,0 +1,14 @@
+package com.bily.samuel.spseinstructor;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class EditOptionActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_option);
+    }
+
+}

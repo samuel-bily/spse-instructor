@@ -30,7 +30,11 @@
         <activity android:name=".UserStatsActivity" />
         <activity android:name=".QuestionsStatsActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".EditTestActivity" />
+        <activity android:name=".EditQuestionAcitivity" />
+        <activity android:name=".EditQuestionActivity"></activity>
+        <activity android:name=".EditOptionActivity"></activity>
     </application>
 
 </manifest>
