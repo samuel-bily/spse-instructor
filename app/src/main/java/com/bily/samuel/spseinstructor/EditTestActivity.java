@@ -54,6 +54,13 @@ public class EditTestActivity extends AppCompatActivity implements SwipeRefreshL
         getTests.execute();
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        getTests = new GetTests();
+        getTests.execute();
+    }
+
     public void loadDataToListView(){
         try{
             final ArrayList<Test> tests = db.getTestsEdit();
@@ -72,6 +79,7 @@ public class EditTestActivity extends AppCompatActivity implements SwipeRefreshL
                     Intent i = new Intent(getApplicationContext(),EditQuestionActivity.class);
                     i.putExtra("id_t",test.getId_t());
                     i.putExtra("name",test.getName());
+                    i.putExtra("active", test.getActive());
                     startActivity(i);
                 }
             });

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/edit_name"
-        android:title="Premenovať"
+        android:title="Premenovať test"
         android:showAsAction="always"/>
     <item android:id="@+id/publish"
         android:title="Zverejniť"
+        android:showAsAction="ifRoom"
+        android:enabled="false"/>
+    <item android:id="@+id/nopublish"
+        android:title="Zrušiť zverejnenie"
+        android:enabled="false"
         android:showAsAction="ifRoom"/>
 </menu>

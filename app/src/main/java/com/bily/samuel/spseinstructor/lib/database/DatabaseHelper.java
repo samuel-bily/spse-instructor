@@ -19,12 +19,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "quiz";
     private static final String TABLE_USER = "user";
     private static final String TABLE_STAT_TESTS = "stat_tests";
-    private static final String TABLE_EDIT_TESTS= "edit_tests";
     private static final String TABLE_STAT_USERS = "stat_users";
     private static final String TABLE_STAT_QUESTIONS = "stat_questions";
 
+    private static final String TABLE_EDIT_TESTS = "edit_tests";
+    private static final String TABLE_EDIT_QUESTIONS = "edit_questions";
+
+
     private static final String KEY_ID = "id";
     private static final String KEY_IDU = "id_u";
+    private static final String KEY_IDQ = "id_q";
     private static final String KEY_IDT = "id_t";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
@@ -36,9 +40,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER +  " (" + KEY_ID + " INTEGER PRIMARY KEY,"+ KEY_IDU + " INTEGER," + KEY_NAME + " TEXT," + KEY_EMAIL + " TEXT" + ")";
 
     private static final String CREATE_TABLE_STAT_TESTS = "CREATE TABLE " + TABLE_STAT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
-    private static final String CREATE_TABLE_EDIT_TESTS = "CREATE TABLE " + TABLE_EDIT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ACTIVE + " INT" + ")";
     private static final String CREATE_TABLE_STAT_USERS = "CREATE TABLE " + TABLE_STAT_USERS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER,"+ KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
     private static final String CREATE_TABLE_STAT_QUESTIONS = "CREATE TABLE " + TABLE_STAT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER," + KEY_RIGHT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ANSWER+" TEXT"+")";
+
+    private static final String CREATE_TABLE_EDIT_TESTS = "CREATE TABLE " + TABLE_EDIT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ACTIVE + " INT" + ")";
+    private static final String CREATE_TABLE_EDIT_QUESTIONS = "CREATE TABLE " + TABLE_EDIT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDQ + " INTEGER," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_RIGHT+" INT"+")";
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,9 +55,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_STAT_QUESTIONS);
-        db.execSQL(CREATE_TABLE_EDIT_TESTS);
         db.execSQL(CREATE_TABLE_STAT_TESTS);
         db.execSQL(CREATE_TABLE_STAT_USERS);
+
+        db.execSQL(CREATE_TABLE_EDIT_TESTS);
+        db.execSQL(CREATE_TABLE_EDIT_QUESTIONS);
     }
 
     @Override
@@ -102,6 +111,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_ANSWER, q.getStat());
         values.put(KEY_RIGHT, q.getRight());
         db.insert(TABLE_STAT_QUESTIONS, null, values);
+    }
+
+    public void storeQuestionsEdit(Question q){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, q.getName());
+        values.put(KEY_IDT, q.getIdT());
+        values.put(KEY_IDQ, q.getId());
+        values.put(KEY_RIGHT, q.getRight());
+        db.insert(TABLE_EDIT_QUESTIONS, null, values);
     }
 
     public void storeUser(User user){
@@ -177,6 +196,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return questions;
     }
 
+    public ArrayList<Question> getQuestionsEdit(int idt){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Question> questions = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_EDIT_QUESTIONS + " WHERE " + KEY_IDT + " = " + idt,null);
+        for(int i = 0; i < c.getCount(); i++){
+            c.moveToPosition(i);
+            Question q = new Question();
+            q.setId(c.getInt(c.getColumnIndex(KEY_IDQ)));
+            q.setIdT(c.getInt(c.getColumnIndex(KEY_IDT)));
+            q.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+            q.setRight(c.getInt(c.getColumnIndex(KEY_RIGHT)));
+            questions.add(q);
+        }
+        c.close();
+        return questions;
+    }
+
+
     public void dropTests(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_STAT_TESTS, null, null);
@@ -192,6 +229,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void dropQuestions(int idt, int idu){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_STAT_QUESTIONS, KEY_IDT + "=" + idt + " AND " + KEY_IDU + " = " + idu , null);
+    }
+
+    public void dropQuestionsEdit(int idt){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_EDIT_QUESTIONS, KEY_IDT + "=" + idt, null);
     }
 
     public User getUser(){
@@ -218,8 +260,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_QUESTIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_TESTS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDIT_TESTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDIT_TESTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDIT_QUESTIONS);
         onCreate(db);
     }
 }
