@@ -9,6 +9,8 @@ public class Test {
     private int id;
     private double stat;
     private String name;
+    private int active;
+    private String info;
 
     public Test(){}
 
@@ -43,4 +45,14 @@ public class Test {
     public void setId(int id) {
         this.id = id;
     }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+
 }

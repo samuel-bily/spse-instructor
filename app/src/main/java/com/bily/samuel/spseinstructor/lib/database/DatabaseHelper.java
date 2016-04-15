@@ -19,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "quiz";
     private static final String TABLE_USER = "user";
     private static final String TABLE_STAT_TESTS = "stat_tests";
+    private static final String TABLE_EDIT_TESTS= "edit_tests";
     private static final String TABLE_STAT_USERS = "stat_users";
     private static final String TABLE_STAT_QUESTIONS = "stat_questions";
 
@@ -28,12 +29,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_ANSWER = "answer";
+    private static final String KEY_ACTIVE = "active";
     private static final String KEY_STAT = "stat";
     private static final String KEY_RIGHT = "right";
 
     private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER +  " (" + KEY_ID + " INTEGER PRIMARY KEY,"+ KEY_IDU + " INTEGER," + KEY_NAME + " TEXT," + KEY_EMAIL + " TEXT" + ")";
 
     private static final String CREATE_TABLE_STAT_TESTS = "CREATE TABLE " + TABLE_STAT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
+    private static final String CREATE_TABLE_EDIT_TESTS = "CREATE TABLE " + TABLE_EDIT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ACTIVE + " INT" + ")";
     private static final String CREATE_TABLE_STAT_USERS = "CREATE TABLE " + TABLE_STAT_USERS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER,"+ KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
     private static final String CREATE_TABLE_STAT_QUESTIONS = "CREATE TABLE " + TABLE_STAT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER," + KEY_RIGHT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ANSWER+" TEXT"+")";
 
@@ -45,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USER);
         db.execSQL(CREATE_TABLE_STAT_QUESTIONS);
+        db.execSQL(CREATE_TABLE_EDIT_TESTS);
         db.execSQL(CREATE_TABLE_STAT_TESTS);
         db.execSQL(CREATE_TABLE_STAT_USERS);
     }
@@ -61,6 +65,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_NAME, test.getName());
         values.put(KEY_STAT, test.getStat());
         db.insert(TABLE_STAT_TESTS, null, values);
+    }
+
+    public void storeTestEdit(Test test){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDT, test.getId_t());
+        values.put(KEY_NAME, test.getName());
+        values.put(KEY_ACTIVE, test.getActive());
+        db.insert(TABLE_EDIT_TESTS, null, values);
     }
 
     public void storeUsers(Test test){
@@ -116,6 +129,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return tests;
     }
 
+    public ArrayList<Test> getTestsEdit(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Test> tests = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_EDIT_TESTS,null);
+        for(int i = 0; i < c.getCount(); i++){
+            c.moveToPosition(i);
+            Test t = new Test();
+            t.setId_t(c.getInt(c.getColumnIndex(KEY_IDT)));
+            t.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+            t.setActive(c.getInt(c.getColumnIndex(KEY_ACTIVE)));
+            tests.add(t);
+        }
+        c.close();
+        return tests;
+    }
+
     public ArrayList<Test> getUsers(int idt){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Test> tests = new ArrayList<>();
@@ -152,6 +181,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_STAT_TESTS, null, null);
     }
+    public void dropTestsEdit(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete( TABLE_EDIT_TESTS, null, null);
+    }
     public void dropUsers(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_STAT_USERS, KEY_IDT + "=" + id, null);
@@ -185,6 +218,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_QUESTIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_TESTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDIT_TESTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_USERS);
         onCreate(db);
     }

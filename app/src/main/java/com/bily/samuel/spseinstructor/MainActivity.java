@@ -88,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void onMyTestsButtonClicked(View view){
+        Intent i = new Intent(getApplicationContext(), EditTestActivity.class);
+        startActivity(i);
+    }
+
     @SuppressLint("ValidFragment")
     public class dialogFragment extends DialogFragment {
         @Override

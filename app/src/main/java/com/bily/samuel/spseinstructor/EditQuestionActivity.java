@@ -1,6 +1,7 @@
 package com.bily.samuel.spseinstructor;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -30,11 +31,16 @@ public class EditQuestionActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private ActionProcessButton button;
     private String name;
+    private int id_t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_question);
+        Intent i = getIntent();
+        name = i.getStringExtra("name");
+        id_t = i.getIntExtra("id_t",0);
+        setTitle(name);
     }
 
     @Override
