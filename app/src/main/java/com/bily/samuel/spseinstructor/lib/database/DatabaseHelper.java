@@ -24,12 +24,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_EDIT_TESTS = "edit_tests";
     private static final String TABLE_EDIT_QUESTIONS = "edit_questions";
+    private static final String TABLE_EDIT_OPTIONS = "edit_options";
 
 
     private static final String KEY_ID = "id";
+    private static final String KEY_IDO = "id_o";
     private static final String KEY_IDU = "id_u";
     private static final String KEY_IDQ = "id_q";
     private static final String KEY_IDT = "id_t";
+    private static final String KEY_TYPE = "type";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_ANSWER = "answer";
@@ -44,9 +47,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_STAT_QUESTIONS = "CREATE TABLE " + TABLE_STAT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER," + KEY_RIGHT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ANSWER+" TEXT"+")";
 
     private static final String CREATE_TABLE_EDIT_TESTS = "CREATE TABLE " + TABLE_EDIT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_ACTIVE + " INT" + ")";
-    private static final String CREATE_TABLE_EDIT_QUESTIONS = "CREATE TABLE " + TABLE_EDIT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDQ + " INTEGER," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_RIGHT+" INT"+")";
-
-
+    private static final String CREATE_TABLE_EDIT_QUESTIONS = "CREATE TABLE " + TABLE_EDIT_QUESTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDQ + " INTEGER," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_RIGHT+" INTEGER"+")";
+    private static final String CREATE_TABLE_EDIT_OPTIONS = "CREATE TABLE " + TABLE_EDIT_OPTIONS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDO + " INTEGER," + KEY_IDQ + " INTEGER," + KEY_NAME + " TEXT," + KEY_TYPE + " INTEGER" + ")";
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -60,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_TABLE_EDIT_TESTS);
         db.execSQL(CREATE_TABLE_EDIT_QUESTIONS);
+        db.execSQL(CREATE_TABLE_EDIT_OPTIONS);
     }
 
     @Override
@@ -121,6 +124,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_IDQ, q.getId());
         values.put(KEY_RIGHT, q.getRight());
         db.insert(TABLE_EDIT_QUESTIONS, null, values);
+    }
+
+    public void storeOptionEdit(Option o){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME,o.getName());
+        values.put(KEY_IDQ, o.getId_q());
+        values.put(KEY_IDO, o.getId_o());
+        values.put(KEY_TYPE,o.getType());
+        db.insert(TABLE_EDIT_OPTIONS, null, values);
     }
 
     public void storeUser(User user){
@@ -213,6 +226,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return questions;
     }
 
+    public ArrayList<Option> getOptionsEdit(int idq){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Option> options = new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_EDIT_OPTIONS + " WHERE " + KEY_IDQ + " = " + idq,null);
+        for(int i = 0; i < c.getCount(); i++){
+            c.moveToPosition(i);
+            Option o = new Option();
+            o.setId_q(c.getInt(c.getColumnIndex(KEY_IDQ)));
+            o.setId_o(c.getInt(c.getColumnIndex(KEY_IDO)));
+            o.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+            o.setType(c.getInt(c.getColumnIndex(KEY_TYPE)));
+            options.add(o);
+        }
+        c.close();
+        return options;
+    }
+
 
     public void dropTests(){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -234,6 +264,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void dropQuestionsEdit(int idt){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_EDIT_QUESTIONS, KEY_IDT + "=" + idt, null);
+    }
+    public void dropOptionsEdit(int idq){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_EDIT_OPTIONS, KEY_IDQ + "=" + idq, null);
     }
 
     public User getUser(){
@@ -263,6 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STAT_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDIT_TESTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDIT_QUESTIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDIT_OPTIONS);
         onCreate(db);
     }
 }

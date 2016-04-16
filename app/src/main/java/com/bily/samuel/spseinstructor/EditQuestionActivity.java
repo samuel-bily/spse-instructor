@@ -167,11 +167,18 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
     public void editName(){
         fm = getSupportFragmentManager();
         ChangeTestName changeName = new ChangeTestName();
-        changeName.show(fm, "Zmena mena");
+        changeName.show(fm, "Premenovať test");
     }
 
     @Override
     public void onRefresh() {
+        getQuestions = new GetQuestions();
+        getQuestions.execute();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         getQuestions = new GetQuestions();
         getQuestions.execute();
     }
@@ -191,9 +198,10 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Question q = adapter.getItem(position);
-                    Intent i = new Intent(getApplicationContext(),EditQuestionActivity.class);
-                    i.putExtra("id_t",q.getId());
+                    Intent i = new Intent(getApplicationContext(),EditOptionActivity.class);
+                    i.putExtra("id_q",q.getId());
                     i.putExtra("name",q.getName());
+                    i.putExtra("id_o",q.getRight());
                     startActivity(i);
                 }
             });
@@ -201,7 +209,6 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
             Log.e("Loading", e.toString());
         }
     }
-
 
     class GetQuestions extends AsyncTask<Void,Void,Void> {
 
@@ -260,6 +267,7 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                     button.setProgress(50);
                     final EditText editName = (EditText)rootView.findViewById(R.id.fragName);
                     name = editName.getText().toString();
+                    Log.e("Sending", name);
                     new AsyncTask<Void, Void, Void>() {
 
                         @Override
@@ -268,6 +276,7 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                             HashMap<String, String> values = new HashMap<>();
                             values.put("tag","changeTestName");
                             values.put("name", name);
+                            values.put("id_t", "" + id_t);
                             try {
                                 JSONObject jsonObject = jsonParser.makePostCall(values);
                                 if (jsonObject.getInt("success") == 1) {
