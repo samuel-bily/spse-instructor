@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public void onAddTestButtonClicked(View view){
         fm = getSupportFragmentManager();
         dialogFragment dFragment = new dialogFragment();
-        dFragment.show(fm, "Policy");
+        dFragment.show(fm, "Vytvoriť test");
     }
 
     public void onProfileButtonClicked(View view){
