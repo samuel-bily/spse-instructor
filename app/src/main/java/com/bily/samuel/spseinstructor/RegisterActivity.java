@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,22 +128,18 @@ public class RegisterActivity extends AppCompatActivity {
             values.put("pass", pass);
             try {
                 JSONObject jsonObject = jsonParser.makePostCall(values);
-                int success = jsonObject.getInt("success");
-                if (success == 1) {
+                Log.e("getting",jsonObject.toString());
+                if (jsonObject.getInt("success") == 1){
+                    Log.e("getting","Sucess = 1");
                     JSONObject jsonUser = jsonObject.getJSONObject("user");
                     User user = new User();
-                    user.setIdu(jsonUser.getInt("id_i"));
+                    user.setIdu(jsonUser.getInt("id"));
                     user.setEmail(jsonUser.getString("email"));
                     user.setName(jsonUser.getString("name"));
                     db.storeUser(user);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent i = new Intent(getApplicationContext(),MainActivity.class);
-                            finish();
-                            startActivity(i);
-                        }
-                    });
+                    Log.e("getting","Intent");
+                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(i);
                 } else {
                     final String message = jsonObject.getString("msg");
                     if (!jsonObject.getString("msg").isEmpty()) {

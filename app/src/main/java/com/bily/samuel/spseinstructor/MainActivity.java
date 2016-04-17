@@ -2,10 +2,12 @@ package com.bily.samuel.spseinstructor;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +15,23 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.bily.samuel.spseinstructor.lib.JSONParser;
+import com.bily.samuel.spseinstructor.lib.adapter.EditTestAdapter;
 import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
 import com.bily.samuel.spseinstructor.lib.database.User;
 import com.dd.processbutton.iml.ActionProcessButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
     private FragmentManager fm;
+    private String testName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,20 +49,6 @@ public class MainActivity extends AppCompatActivity {
             userName.setText(user.getName());
             userEmail.setText(user.getEmail());
         }
-        /**
-        buttonLogout = (ActionProcessButton)findViewById(R.id.btnLogIn);
-        buttonLogout.setMode(ActionProcessButton.Mode.ENDLESS);
-        buttonLogout.setColorScheme( getResources().getColor(R.color.colorLight),getResources().getColor(R.color.colorAccent), getResources().getColor(R.color.colorDark),getResources().getColor(R.color.colorPrimaryDark));
-        buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonLogout.setProgress(50);
-                db.dropTable();
-                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
-                finish();
-                startActivity(i);
-            }
-        });**/
     }
 
     public void onResume(){
@@ -104,11 +99,33 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     EditText name = (EditText)rootView.findViewById(R.id.testNameEdit);
-                    EditText number = (EditText) rootView.findViewById(R.id.questionNumber);
-                    Intent i = new Intent(getApplicationContext(),AddTest.class);
-                    i.putExtra("name",name.getText().toString());
-                    i.putExtra("number",Integer.parseInt(number.getText().toString()));
-                    startActivity(i);
+                    testName = name.getText().toString();
+                    new AsyncTask<Void,Void,Void>(){
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            db = new DatabaseHelper(getApplicationContext());
+                            User user = db.getUser();
+                            JSONParser jsonParser = new JSONParser();
+                            HashMap<String, String> values = new HashMap<>();
+                            values.put("tag", "setTest");
+                            values.put("name",testName);
+                            values.put("id_i","" + user.getIdu());
+                            try{
+                                Log.e("sending",values.toString());
+                                JSONObject jsonObject = jsonParser.makePostCall(values);
+                                Log.e("getting",jsonObject.toString());
+                                if (jsonObject.getInt("success") == 1) {
+                                    Intent i = new Intent(getApplicationContext(),EditTestActivity.class);
+                                    startActivity(i);
+                                }else{
+                                }
+                            }catch (JSONException e){
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    }.execute();
                 }
             });
             return rootView;

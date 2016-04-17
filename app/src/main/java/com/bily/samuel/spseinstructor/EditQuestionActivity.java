@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -58,6 +59,18 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
         setTitle(name);
         loadDataToListView();
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                Intent i = new Intent(getApplicationContext(), AddQuestionActivity.class);
+                i.putExtra("id_t",id_t);
+                startActivity(i);
+            }
+        });
+
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeQuiz);
         assert swipeRefreshLayout != null;
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -66,7 +79,6 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
 
         getQuestions = new GetQuestions();
         getQuestions.execute();
-
     }
 
     @Override
