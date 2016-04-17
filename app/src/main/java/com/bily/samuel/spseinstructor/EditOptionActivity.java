@@ -1,13 +1,22 @@
 package com.bily.samuel.spseinstructor;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -28,6 +37,7 @@ import java.util.HashMap;
 public class EditOptionActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FragmentManager fm;
     private ActionProcessButton button;
     private DatabaseHelper db;
     private GetOptions getOptions;
@@ -187,9 +197,56 @@ public class EditOptionActivity extends AppCompatActivity implements SwipeRefres
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_edit_option, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete:
+                delete();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void delete(){
+        fm = getSupportFragmentManager();
+        DeleteQuestionDialog deleteQuestionDialog = new DeleteQuestionDialog();
+        deleteQuestionDialog.show(fm, "");
+    }
+
+    @Override
     public void onRefresh() {
         getOptions = new GetOptions();
         getOptions.execute();
+    }
+
+    class DeleteQuestionAsync extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONParser jsonParser = new JSONParser();
+            HashMap<String, String> values = new HashMap<>();
+            values.put("tag", "deleteQuestion");
+            values.put("id_q","" + id_q);
+            try{
+                Log.e("sending",values.toString());
+                JSONObject jsonObject = jsonParser.makePostCall(values);
+                Log.e("getting",jsonObject.toString());
+                if (jsonObject.getInt("success") == 1) {
+                    finish();
+                }else{
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 
     class GetOptions extends AsyncTask<Void,Void,Void> {
@@ -229,6 +286,28 @@ public class EditOptionActivity extends AppCompatActivity implements SwipeRefres
             });
 
             return null;
+        }
+    }
+
+    @SuppressLint("ValidFragment")
+    public class DeleteQuestionDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Vymazať otázku?")
+                    .setPositiveButton("Áno", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            new DeleteQuestionAsync().execute();
+                        }
+                    })
+                    .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
         }
     }
 

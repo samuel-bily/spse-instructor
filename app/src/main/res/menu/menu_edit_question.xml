@@ -2,7 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/edit_name"
         android:title="Premenovať test"
-        android:showAsAction="always"/>
+        android:showAsAction="ifRoom"/>
+    <item android:id="@+id/delete"
+        android:title="Vymazať test"
+        android:showAsAction="ifRoom"/>
     <item android:id="@+id/publish"
         android:title="Zverejniť"
         android:showAsAction="ifRoom"

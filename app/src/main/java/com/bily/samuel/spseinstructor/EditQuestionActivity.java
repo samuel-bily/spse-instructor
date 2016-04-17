@@ -1,6 +1,8 @@
 package com.bily.samuel.spseinstructor;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.AsyncTask;
@@ -9,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -102,6 +105,9 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
             case R.id.edit_name:
                 editName();
                 return true;
+            case R.id.delete:
+                delete();
+                return true;
             case R.id.publish:
                 publish();
                 return true;
@@ -173,7 +179,12 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                 return null;
             }
         }.execute();
+    }
 
+    public void delete(){
+        fm = getSupportFragmentManager();
+        DeleteTestDialog deleteTestDialog = new DeleteTestDialog();
+        deleteTestDialog.show(fm, "");
     }
 
     public void editName(){
@@ -219,6 +230,29 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
             });
         }catch(CursorIndexOutOfBoundsException | NullPointerException e){
             Log.e("Loading", e.toString());
+        }
+    }
+
+    class DeleteTestAsync extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            JSONParser jsonParser = new JSONParser();
+            HashMap<String, String> values = new HashMap<>();
+            values.put("tag", "deleteTest");
+            values.put("id_t","" + id_t);
+            try{
+                Log.e("sending",values.toString());
+                JSONObject jsonObject = jsonParser.makePostCall(values);
+                Log.e("getting",jsonObject.toString());
+                if (jsonObject.getInt("success") == 1) {
+                    finish();
+                }else{
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
@@ -312,6 +346,28 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                 }
             });
             return rootView;
+        }
+    }
+
+    @SuppressLint("ValidFragment")
+    public class DeleteTestDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Vymazať test?")
+                    .setPositiveButton("Áno", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            new DeleteTestAsync().execute();
+                        }
+                    })
+                    .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
         }
     }
 }
