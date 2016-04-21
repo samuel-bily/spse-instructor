@@ -3,9 +3,13 @@ package com.bily.samuel.spseinstructor;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -59,6 +63,55 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
     public void onRefresh() {
         getQuestionStats = new GetQuestionStats();
         getQuestionStats.execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_user_stats, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.renewTest:
+                reNewTest();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void reNewTest(){
+        new AsyncTask<Void,Void,Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                JSONParser jsonParser = new JSONParser();
+                HashMap<String,String> values = new HashMap<>();
+                values.put("tag","reNewTest");
+                values.put("idt",""+idT);
+                values.put("idu",""+idU);
+                try {
+                    JSONObject jsonObject = jsonParser.makePostCall(values);
+                    if(jsonObject.getInt("success") == 1) {
+                        finish();
+                    }else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Snackbar.make(findViewById(android.R.id.content),"Ste offline.",Snackbar.LENGTH_SHORT);
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     public void loadDataToListView(){

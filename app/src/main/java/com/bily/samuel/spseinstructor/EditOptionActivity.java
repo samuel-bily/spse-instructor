@@ -63,6 +63,7 @@ public class EditOptionActivity extends AppCompatActivity implements SwipeRefres
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_option);
         db = new DatabaseHelper(getApplicationContext());
+        setTitle("Úprava otázky");
         Intent i = getIntent();
         id_q = i.getIntExtra("id_q",0);
         rightIdO = i.getIntExtra("id_o",0);
