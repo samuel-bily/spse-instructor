@@ -7,11 +7,20 @@ public class User {
 
     private int id;
     private int idu;
+    private int active;
     private String name;
     private String email;
 
     public User(){
 
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 
     public int getId() {

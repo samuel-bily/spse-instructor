@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_STAT = "stat";
     private static final String KEY_RIGHT = "right";
 
-    private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER +  " (" + KEY_ID + " INTEGER PRIMARY KEY,"+ KEY_IDU + " INTEGER," + KEY_NAME + " TEXT," + KEY_EMAIL + " TEXT" + ")";
+    private static final String CREATE_TABLE_USER = "CREATE TABLE " + TABLE_USER +  " (" + KEY_ID + " INTEGER PRIMARY KEY,"+ KEY_IDU + " INTEGER," + KEY_NAME + " TEXT," + KEY_EMAIL + " TEXT," + KEY_ACTIVE + " INTEGER" + ")";
 
     private static final String CREATE_TABLE_STAT_TESTS = "CREATE TABLE " + TABLE_STAT_TESTS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDT + " INTEGER," + KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
     private static final String CREATE_TABLE_STAT_USERS = "CREATE TABLE " + TABLE_STAT_USERS + " (" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_IDU + " INTEGER," + KEY_IDT + " INTEGER,"+ KEY_NAME + " TEXT," + KEY_STAT + " DOUBLE" + ")";
@@ -142,6 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_IDU, user.getIdu());
         values.put(KEY_EMAIL, user.getEmail());
         values.put(KEY_NAME, user.getName());
+        values.put(KEY_ACTIVE, user.getActive());
         db.insert(TABLE_USER, null, values);
     }
 
@@ -279,6 +280,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 user.setIdu(c.getInt(c.getColumnIndex(KEY_IDU)));
                 user.setName(c.getString(c.getColumnIndex(KEY_NAME)));
                 user.setEmail(c.getString(c.getColumnIndex(KEY_EMAIL)));
+                user.setActive(c.getInt(c.getColumnIndex(KEY_ACTIVE)));
                 c.close();
                 return user;
             }

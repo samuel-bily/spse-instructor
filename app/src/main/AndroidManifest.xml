@@ -35,7 +35,11 @@
         <activity android:name=".EditQuestionAcitivity" />
         <activity android:name=".EditQuestionActivity" />
         <activity android:name=".EditOptionActivity" />
-        <activity android:name=".AddQuestionActivity"></activity>
+        <activity android:name=".AddQuestionActivity" />
+        <activity
+            android:name=".ActivateUserScrollingActivity"
+            android:label="@string/title_activity_activate_user_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

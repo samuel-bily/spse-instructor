@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setIdu(jsonUser.getInt("id"));
                     user.setEmail(jsonUser.getString("email"));
                     user.setName(jsonUser.getString("name"));
+                    user.setActive(jsonUser.getInt("is_active"));
                     db.storeUser(user);
                     runOnUiThread(new Runnable() {
                         @Override

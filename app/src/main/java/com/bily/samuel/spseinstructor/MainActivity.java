@@ -32,18 +32,19 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper db;
     private FragmentManager fm;
     private String testName;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = new DatabaseHelper(getApplicationContext());
-        User user = db.getUser();
+        user = db.getUser();
         if(user == null){
             Intent i = new Intent(getApplicationContext(),LoginActivity.class);
             finish();
             startActivity(i);
-        }else {
+        }else{
             TextView userName = (TextView) findViewById(R.id.userName);
             TextView userEmail = (TextView) findViewById(R.id.userEmail);
             userName.setText(user.getName());
@@ -65,25 +66,51 @@ public class MainActivity extends AppCompatActivity {
             userName.setText(user.getName());
             userEmail.setText(user.getEmail());
         }
+        Log.e("IS ACTIVE?"," " + user.getActive());
     }
 
-    public void onAddTestButtonClicked(View view){
+    public void onLayoutListener(View view){
+        int id = view.getId();
+        if(user.getActive()>0) {
+            switch (id) {
+                case R.id.newTest:
+                    addTest();
+                    break;
+                case R.id.myTests:
+                    myTests();
+                    break;
+                case R.id.stats:
+                    stats();
+                    break;
+                case R.id.userLayout:
+                    profile();
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            Intent intent = new Intent(getApplicationContext(),ActivateUserScrollingActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    public void addTest(){
         fm = getSupportFragmentManager();
         dialogFragment dFragment = new dialogFragment();
         dFragment.show(fm, "Vytvoriť test");
     }
 
-    public void onProfileButtonClicked(View view){
+    public void profile(){
         Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(i);
     }
 
-    public void onStatisticsButtonClicked(View view){
+    public void stats(){
         Intent i = new Intent(getApplicationContext(), StatisticsActivity.class);
         startActivity(i);
     }
 
-    public void onMyTestsButtonClicked(View view){
+    public void myTests(){
         Intent i = new Intent(getApplicationContext(), EditTestActivity.class);
         startActivity(i);
     }
