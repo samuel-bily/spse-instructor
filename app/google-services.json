@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "702396043679",
+    "firebase_url": "https://edukviz-67632.firebaseio.com",
+    "project_id": "edukviz-67632",
+    "storage_bucket": "edukviz-67632.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702396043679:android:8069e382413c3805",
+        "android_client_info": {
+          "package_name": "com.bily.samuel.spseinstructor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702396043679-piqtk0giibn8as9t31p258tgp1pjp5ds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgu33vJiw7G6WPbmGhF33FayKLrHYAz7k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

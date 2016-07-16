@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import com.bily.samuel.spseinstructor.lib.adapter.EditTestAdapter;
 import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
 import com.bily.samuel.spseinstructor.lib.database.User;
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +52,39 @@ public class MainActivity extends AppCompatActivity {
             TextView userEmail = (TextView) findViewById(R.id.userEmail);
             userName.setText(user.getName());
             userEmail.setText(user.getEmail());
+            sendRegId();
         }
+    }
+
+    public void sendRegId(){
+        final String regId = FirebaseInstanceId.getInstance().getToken();
+
+        new AsyncTask<Void,Void,Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                db = new DatabaseHelper(getApplicationContext());
+                User user = db.getUser();
+                JSONParser jsonParser = new JSONParser();
+                HashMap<String, String> values = new HashMap<>();
+                values.put("tag", "setRegId");
+                values.put("regId",regId);
+                values.put("id_i","" + user.getIdu());
+                try{
+                    Log.e("sending",values.toString());
+                    JSONObject jsonObject = jsonParser.makePostCall(values);
+                    //Log.e("getting",jsonObject.toString());
+                    if (jsonObject.getInt("success") == 1) {
+                        Intent i = new Intent(getApplicationContext(),EditTestActivity.class);
+                        startActivity(i);
+                    }else{
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     public void onResume(){
