@@ -11,23 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
-import com.bily.samuel.spseinstructor.lib.adapter.EditTestAdapter;
 import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
 import com.bily.samuel.spseinstructor.lib.database.User;
-import com.dd.processbutton.iml.ActionProcessButton;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
             userEmail.setText(user.getEmail());
             sendRegId();
         }
+
+        if(user.getActive() > 0){
+            GridLayout gridLayout = (GridLayout)findViewById(R.id.noActivatedLayout);
+            gridLayout.setVisibility(View.GONE);
+        }
     }
 
     public void sendRegId(){
@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObject = jsonParser.makePostCall(values);
                     //Log.e("getting",jsonObject.toString());
                     if (jsonObject.getInt("success") == 1) {
-                        Intent i = new Intent(getApplicationContext(),EditTestActivity.class);
-                        startActivity(i);
                     }else{
                     }
                 }catch (JSONException e){
