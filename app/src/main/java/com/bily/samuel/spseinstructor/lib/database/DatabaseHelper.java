@@ -105,6 +105,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_USER,cv,"1",new String[]{});
     }
 
+    public void changeActive(int active){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_ACTIVE,active);
+        db.update(TABLE_USER,cv,"1",new String[]{});
+    }
+
+
     public void storeQuestions(Question q){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

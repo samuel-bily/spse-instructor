@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         }.execute();
     }
 
+
     public void onResume(){
         super.onResume();
         db = new DatabaseHelper(getApplicationContext());
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onLayoutListener(View view){
         int id = view.getId();
+        user = db.getUser();
         if(user.getActive()>0) {
             switch (id) {
                 case R.id.newTest:
