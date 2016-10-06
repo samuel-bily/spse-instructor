@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">702396043679-piqtk0giibn8as9t31p258tgp1pjp5ds.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://edukviz-67632.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">702396043679</string>
+    <string name="google_api_key" translatable="false">AIzaSyAgu33vJiw7G6WPbmGhF33FayKLrHYAz7k</string>
+    <string name="google_app_id" translatable="false">1:702396043679:android:8069e382413c3805</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAgu33vJiw7G6WPbmGhF33FayKLrHYAz7k</string>
+    <string name="google_storage_bucket" translatable="false">edukviz-67632.appspot.com</string>
+</resources>

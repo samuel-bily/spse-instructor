@@ -6,10 +6,13 @@ import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
 import com.bily.samuel.spseinstructor.lib.database.User;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -35,19 +38,8 @@ public class FbMessagingService extends FirebaseMessagingService {
         // If the application is in the foreground handle both data and notification messages here.
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        Log.w(TAG, "From: " + remoteMessage.getFrom());
-        Log.w(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
-        String active = remoteMessage.getData().get("active");
-        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-        Log.e("active",active);
-        if(active.equals("1")){
-            db.changeActive(1);
-        }else{
-            db.changeActive(0);
-        }
-        Intent i = new Intent(getApplicationContext(),MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplicationContext().startActivity(i);
+        Log.e(TAG, "From: " + remoteMessage.getFrom());
+        Log.e(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
     }
     // [END receive_message]
 

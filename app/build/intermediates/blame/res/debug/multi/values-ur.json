@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-ur/values-ur.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 257,
+                    "endOffset": 358
+                },
+                "from": {
+                    "file": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.2.1/res/values-ur/values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 330,
+                        "endColumn": 257,
+                        "endOffset": 583
+                    }
+                }
+            }
+        ]
+    }
+]

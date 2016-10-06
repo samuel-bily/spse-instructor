@@ -101,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
             userEmail.setText(user.getEmail());
         }
         Log.e("IS ACTIVE?"," " + user.getActive());
+        if(user.getActive() > 0){
+            GridLayout gridLayout = (GridLayout)findViewById(R.id.noActivatedLayout);
+            gridLayout.setVisibility(View.GONE);
+        }
     }
 
     public void onLayoutListener(View view){

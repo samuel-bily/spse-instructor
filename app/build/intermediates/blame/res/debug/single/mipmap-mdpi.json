@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_launcher.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_false.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_false.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_user.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_user.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_add_floating.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_add_floating.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_background.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_background.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_settings.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_settings.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_test.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_test.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_add.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_add.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_stat.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_stat.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_true.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_true.png"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/mipmap-mdpi/ic_no_access.png",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/mipmap-mdpi/ic_no_access.png"
+    }
+]

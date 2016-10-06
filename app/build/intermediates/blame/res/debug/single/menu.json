@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/menu/menu_user_stats.xml",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/menu/menu_user_stats.xml"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/menu/menu_edit_question.xml",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/menu/menu_edit_question.xml"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/menu/menu_activate_user_scrolling.xml",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/menu/menu_activate_user_scrolling.xml"
+    },
+    {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/menu/menu_edit_option.xml",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/menu/menu_edit_option.xml"
+    }
+]
