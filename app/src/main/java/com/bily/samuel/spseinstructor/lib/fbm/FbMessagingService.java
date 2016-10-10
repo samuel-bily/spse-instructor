@@ -40,6 +40,20 @@ public class FbMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
         Log.e(TAG, "From: " + remoteMessage.getFrom());
         Log.e(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+
+        String active = remoteMessage.getData().get("active");
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        Log.e("active",active);
+            if(active.equals("1")){
+                db.changeActive(1);
+            }else{
+                db.changeActive(0);
+            }
+        Intent i = new Intent(getApplicationContext(),MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        getApplicationContext().startActivity(i);
+
     }
     // [END receive_message]
 
@@ -48,10 +62,10 @@ public class FbMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
+    /**private void sendNotification(String messageBody) {
+        /**Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code , intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -66,6 +80,6 @@ public class FbMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-    }
+        notificationManager.notify(0 /* ID of notification , notificationBuilder.build());
+    }**/
 }

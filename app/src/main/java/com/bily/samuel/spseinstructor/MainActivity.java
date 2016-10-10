@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
         db = new DatabaseHelper(getApplicationContext());
         user = db.getUser();
         if(user == null){
@@ -43,16 +44,29 @@ public class MainActivity extends AppCompatActivity {
             finish();
             startActivity(i);
         }else{
+            try{
+                String active = intent.getExtras().getString("active");
+                DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+                Log.e("active",active);
+                if (active != null) {
+                    if(active.equals("1")){
+                        db.changeActive(1);
+                    }else{
+                        db.changeActive(0);
+                    }
+                }
+            }catch (NullPointerException e){
+
+            }
             TextView userName = (TextView) findViewById(R.id.userName);
             TextView userEmail = (TextView) findViewById(R.id.userEmail);
             userName.setText(user.getName());
             userEmail.setText(user.getEmail());
             sendRegId();
-        }
-
-        if(user.getActive() > 0){
-            GridLayout gridLayout = (GridLayout)findViewById(R.id.noActivatedLayout);
-            gridLayout.setVisibility(View.GONE);
+            if(user.getActive() > 0){
+                GridLayout gridLayout = (GridLayout)findViewById(R.id.noActivatedLayout);
+                gridLayout.setVisibility(View.GONE);
+            }
         }
     }
 
