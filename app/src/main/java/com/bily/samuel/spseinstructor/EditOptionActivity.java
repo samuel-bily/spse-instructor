@@ -14,13 +14,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
@@ -82,6 +87,7 @@ public class EditOptionActivity extends AppCompatActivity implements SwipeRefres
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeQuiz);
         assert swipeRefreshLayout != null;
         swipeRefreshLayout.setOnRefreshListener(this);
+        //noinspection ResourceAsColor
         swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
         swipeRefreshLayout.setRefreshing(true);
         getOptions = new GetOptions();
@@ -227,6 +233,20 @@ public class EditOptionActivity extends AppCompatActivity implements SwipeRefres
         getOptions.execute();
     }
 
+    public void showToast(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        @SuppressWarnings("ConstantConditions") int Y = getSupportActionBar().getHeight();
+        toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,Y);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
     class DeleteQuestionAsync extends AsyncTask<Void,Void,Void>{
 
         @Override
@@ -242,8 +262,10 @@ public class EditOptionActivity extends AppCompatActivity implements SwipeRefres
                 if (jsonObject.getInt("success") == 1) {
                     finish();
                 }else{
+                    showToast("Ste offline");
                 }
             }catch (JSONException e){
+                showToast("Ste offline");
                 e.printStackTrace();
             }
             return null;
@@ -275,7 +297,6 @@ public class EditOptionActivity extends AppCompatActivity implements SwipeRefres
                     }
                 }
             }catch(JSONException e){
-                Log.e("GET STATS", e.toString());
             }
 
             runOnUiThread(new Runnable() {

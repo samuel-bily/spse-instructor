@@ -2,15 +2,17 @@ package com.bily.samuel.spseinstructor;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.adapter.AddQuestionAdapter;
@@ -49,6 +51,20 @@ public class AddTest extends AppCompatActivity {
         listView.setAdapter(questionAdapter);
     }
 
+    public void showToast(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        @SuppressWarnings("ConstantConditions") int Y = getSupportActionBar().getHeight();
+        toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,Y);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
     public void sendQuestions(View view){
         questions = new ArrayList<>();
         for(int i = 0; i < listView.getAdapter().getCount(); i++){
@@ -70,16 +86,6 @@ public class AddTest extends AppCompatActivity {
         new SendTest().execute();
     }
 
-    public Snackbar prepareSnack(String msg){
-        Snackbar snack = Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT);
-        View view = snack.getView();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)view.getLayoutParams();
-        params.gravity = Gravity.TOP;
-        view.clearAnimation();
-        view.setLayoutParams(params);
-        return snack;
-    }
-
     private class SendTest extends AsyncTask<Void, Void, Void>{
 
         @Override
@@ -97,8 +103,7 @@ public class AddTest extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Snackbar snackbar = prepareSnack("Uspešne odoslané.");
-                            snackbar.show();
+                            showToast("Uspešne pridané!");
                             Intent i = new Intent(getApplicationContext(),MainActivity.class);
                             finish();
                             startActivity(i);
@@ -106,7 +111,8 @@ public class AddTest extends AppCompatActivity {
                     });
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                showToast("Ste offline");
+                //e.printStackTrace();
             }
             return null;
         }

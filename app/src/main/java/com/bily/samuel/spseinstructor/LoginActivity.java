@@ -9,10 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
@@ -59,14 +63,17 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void showSnackbar(String msg){
-        Snackbar snack = Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT);
-        View view = snack.getView();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)view.getLayoutParams();
-        params.gravity = Gravity.TOP;
-        view.clearAnimation();
-        view.setLayoutParams(params);
-        snack.show();
+    public void showToast(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
     }
 
     class Login extends AsyncTask<Void, Void, Void> {
@@ -104,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showSnackbar(message);
+                                showToast(message);
                                 buttonLogin.setProgress(0);
                             }
                         });
@@ -112,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showSnackbar("Something went wrong.");
+                                showToast("Ste offline");
                                 buttonLogin.setProgress(0);
                             }
                         });

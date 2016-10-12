@@ -20,6 +20,10 @@
         "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/layout/row_test.xml"
     },
     {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/layout/custom_toast.xml",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/layout/custom_toast.xml"
+    },
+    {
         "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/layout/abc_popup_menu_header_item_layout.xml",
         "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.0.0/res/layout/abc_popup_menu_header_item_layout.xml"
     },
@@ -164,16 +168,16 @@
         "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.0.0/res/layout/abc_action_mode_bar.xml"
     },
     {
+        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/layout/activity_questions_stats.xml",
+        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/layout/activity_questions_stats.xml"
+    },
+    {
         "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/layout/abc_select_dialog_material.xml",
         "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.0.0/res/layout/abc_select_dialog_material.xml"
     },
     {
         "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/layout/fragment_policy.xml",
         "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/layout/fragment_policy.xml"
-    },
-    {
-        "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/layout/activity_questions_stats.xml",
-        "source": "/home/samuel/Projects/Android/Projects/spse-instructor/app/src/main/res/layout/activity_questions_stats.xml"
     },
     {
         "merged": "/home/samuel/Projects/Android/Projects/spse-instructor/app/build/intermediates/res/merged/debug/layout/abc_action_bar_view_list_nav_layout.xml",

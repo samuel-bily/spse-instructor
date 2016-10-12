@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.adapter.EditQuestionAdapter;
@@ -77,6 +80,7 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeQuiz);
         assert swipeRefreshLayout != null;
         swipeRefreshLayout.setOnRefreshListener(this);
+        //noinspection ResourceAsColor
         swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
         swipeRefreshLayout.setRefreshing(true);
 
@@ -119,6 +123,19 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
         }
     }
 
+    public void showToast(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        @SuppressWarnings("ConstantConditions") int Y = getSupportActionBar().getHeight();
+        toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,Y);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
 
     public void publish(){
         new AsyncTask<Void,Void,Void>(){
@@ -138,7 +155,7 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Snackbar.make(findViewById(android.R.id.content),"Ste offline.",Snackbar.LENGTH_SHORT);
+                                showToast("Ste offline");
                             }
                         });
                     }
@@ -169,7 +186,7 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Snackbar.make(findViewById(android.R.id.content),"Ste offline.",Snackbar.LENGTH_SHORT);
+                                showToast("Ste offline");
                             }
                         });
                     }
@@ -332,7 +349,7 @@ public class EditQuestionActivity extends AppCompatActivity implements SwipeRefr
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Snackbar.make(rootView,"Ste offline.",Snackbar.LENGTH_SHORT);
+                                            showToast("Ste offline");
                                         }
                                     });
                                 }

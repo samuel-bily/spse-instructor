@@ -8,12 +8,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.database.DatabaseHelper;
@@ -98,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }.execute();
     }
-
 
     public void onResume(){
         super.onResume();

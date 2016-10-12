@@ -7,12 +7,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bily.samuel.spseinstructor.lib.JSONParser;
 import com.bily.samuel.spseinstructor.lib.adapter.QuestionAdapter;
@@ -52,11 +57,26 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
 
         swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeQuestions);
         swipeRefreshLayout.setOnRefreshListener(this);
+        //noinspection ResourceAsColor
         swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
         swipeRefreshLayout.setRefreshing(true);
 
         getQuestionStats = new GetQuestionStats();
         getQuestionStats.execute();
+    }
+
+    public void showToast(String message){
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        text.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        @SuppressWarnings("ConstantConditions") int Y = getSupportActionBar().getHeight();
+        toast.setGravity(Gravity.TOP|Gravity.FILL_HORIZONTAL,0,Y);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
     }
 
     @Override
@@ -102,7 +122,7 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Snackbar.make(findViewById(android.R.id.content),"Ste offline.",Snackbar.LENGTH_SHORT);
+                                showToast("Ste offline");
                             }
                         });
                     }
@@ -154,6 +174,7 @@ public class QuestionsStatsActivity extends AppCompatActivity implements SwipeRe
                     }
                 }
             } catch (JSONException e) {
+                showToast("Ste offline");
                 e.printStackTrace();
             }
             runOnUiThread(new Runnable() {
